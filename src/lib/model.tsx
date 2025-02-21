@@ -1,19 +1,17 @@
-import { User, KYCDocument, Invoice, FundingRequest, Milestone, ApprovalStatus, Notification } from '@prisma/client';
 
-export type UserWithRelations = User & {
-    kyc_documents: KYCDocument[];
-    invoices: (Invoice & { milestones: Milestone[] & { funding_requests: FundingRequest[] &{milestone: Milestone} } })[]; 
-    funding_requests: (FundingRequest & {milestone: Milestone})[];
-    milestones: Milestone[];
-    notifications: Notification[];
-};
+export interface IValidationError {
+  field: string;
+  rule: string;
+  message: string;
+}
 
-export type IKYCFilterParams = {
-  search?: string;
-  status?: ApprovalStatus;
-  industry?: string;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-};
+export interface IApiError extends Error {
+  code: string;
+  message: string;
+}
+
+export interface IApiResponse<T> {
+  data?: T;
+  validationErrors?: IValidationError[];
+  error?: Error;
+}

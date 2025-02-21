@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_PRISMA_URL")
 }
 
 // Base models with common fields
@@ -21,9 +21,9 @@ model User {
   updated_at         DateTime       @updatedAt
   deleted_at         DateTime?
   role              UserRole       @default(USER)
-  
-  // Relations
-  notifications     Notification[]
+
+  @@index([deleted_at, is_active, is_email_verified])
+  @@map(name: "user")
 }
 
 model Admin {
@@ -36,44 +36,12 @@ model Admin {
   created_at        DateTime       @default(now())
   updated_at        DateTime       @updatedAt
   deleted_at        DateTime?
-  
-  // Relations
-  permissions       Permission[]
-  notifications     Notification[]
-  activity_logs     ActivityLog[]
-}
 
-model Permission {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String?
-  admins      Admin[]
-}
+  @@index([deleted_at, is_active, email])
+  @@map(name: "admin")
 
-model Notification {
-  id          String            @id @default(uuid())
-  message     String
-  type        NotificationType
-  is_read     Boolean          @default(false)
-  created_at  DateTime         @default(now())
-  deleted_at  DateTime?
-  
-  // Relations
-  users       User[]
-  admins      Admin[]
-}
+  }
 
-model ActivityLog {
-  id          String            @id @default(uuid())
-  action      String
-  admin_id    String
-  type        ActivityType
-  created_at  DateTime         @default(now())
-  deleted_at  DateTime?
-  
-  // Relations
-  admin       Admin            @relation(fields: [admin_id], references: [id])
-}
 
 // Enums
 enum UserRole {
@@ -86,17 +54,34 @@ enum AdminRole {
   SUPER_ADMIN
 }
 
-enum NotificationType {
-  SYSTEM
-  USER
-  ADMIN
+model Testimony {
+  id                 String         @id @default(uuid())
+  email              String?
+  first_name         String
+  last_name          String?
+  phone_number       String?
+  city               String?
+  country            String?
+  testimony          String
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+  deleted_at         DateTime?
+
+  @@index([deleted_at])
+  @@map(name: "testimony")
+  
 }
 
-enum ActivityType {
-  CREATE
-  UPDATE
-  DELETE
-  LOGIN
-  LOGOUT
-  READ
+model Program {
+  id                 String         @id @default(uuid())
+  name               String
+  features           String         //comma seperated strings
+  duration           String
+  price              Int
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+  deleted_at         DateTime?
+
+  @@index([deleted_at, name])
+  @@map(name: "program")
 }

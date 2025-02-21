@@ -6,6 +6,8 @@ import "./globals.css"
 import TRPCProvider from "./_providers/trpc-provider";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
+import Navigation from "@/components/navigation";
+import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -16,6 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+      <title>Making Kings Mentorship</title>
+      <meta name="description" content={"Making Kings Mentorship"} />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -24,7 +30,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-            <TRPCProvider>{children}</TRPCProvider>
+            <TRPCProvider>
+             <Navigation />
+
+              {children}
+
+              <Footer />
+            </TRPCProvider>
             <Toaster />
           </SessionProvider>
         </ThemeProvider>
