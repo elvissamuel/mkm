@@ -12,3 +12,8 @@ export const testimonyFormSchema = z.object({
 })
 
 export type TestimonyFormSchema = z.infer<typeof testimonyFormSchema>
+
+export const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})

@@ -1,48 +1,53 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+// import { ERROR_MESSAGES } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+// import { signInSchema } from "@/lib/dtos";
+// import { compare } from "bcryptjs";
+// import { signInSchema } from "./lib/validation-schema";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
-  },
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    CredentialsProvider({
-      name: "credentials",
+    Credentials({
+      id: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
+      // authorize: async (credentials) => {
+      //   const parseCredentials = signInSchema.safeParse(credentials);
+
+      //   if (!parseCredentials.success) {
+      //     throw new Error(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      //   }
+
+      //   const user = await prisma.user.findUnique({
+      //     where: { email: parseCredentials.data.email },
+      //   });
+
+      //   if (
+      //     !user ||
+      //     !user.password ||
+      //     !(await compare(parseCredentials.data.password, user.password))
+      //   ) {
+      //     return null;
+      //   }
+
+      //   return user;
+      // },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials");
-        }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+          where: { email: credentials.email as string },
+          });
 
-        if (!user || !user.password) {
-          throw new Error("Invalid credentials");
-        }
-
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
-        }
-
+        // const user = await findUserByEmail(credentials.email);
+        if (!user) return null;
+      
         return {
           id: user.id,
           email: user.email,
-          name: `${user.first_name} ${user.last_name}`,
-          role: user.role,
+          role: user.role as "USER" | "ADMIN" | "SUPER_ADMIN", // Ensure compatibility
         };
       },
     }),
@@ -50,29 +55,19 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        return {
-          ...token,
-          id: user.id,
-          role: user.role,
-        };
+        token.sub = user.id;
+        token.email = user.email;
       }
+
       return token;
     },
-    async session({ session, token }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          role: token.role,
-        },
-      };
-    },
-  },
-  pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
-  },
-};
 
-export default authOptions;
+    session: async ({ session, token }) => ({
+      ...session,
+      user: {
+        id: token.sub,
+        email: token.email,
+      },
+    }),
+  },
+});

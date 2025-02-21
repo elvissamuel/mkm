@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { testimonyFormSchema, TestimonyFormSchema } from "@/lib/validation-schema"
-import { trpc } from "@/app/_providers/trpc-provider"
 import { useToast } from '@/hooks/use-toast'
 import { useState } from "react"
 import { addTestimony } from "@/lib/api-calls"
@@ -30,29 +29,8 @@ export default function TestimonyForm() {
     },
   })
 
-  // const addTestimony = trpc.createTestimony.useMutation({
-  //   onSuccess: async () => {
-  //     toast({title: "Testimony submitted successfully"});
-  //     form.reset();
-  //   },
-  //   onError: (error) => {
-  //     console.error(error);
-  //     toast({
-  //       title: 'Error in submitting testimony',
-  //       description: error.message,
-  //       variant: 'destructive',
-  //     });
-  //   },
-  // });
-
-  // function onSubmit(values: TestimonyFormSchema) {
-  //   setLoading(true)
-  //   console.log(values)
-  //   addTestimony.mutate({ ...values });
-  //   setLoading(false)
-  // }
-
   const onSubmit = async (input: TestimonyFormSchema) => {
+    setLoading(true);
     const { data, error, validationErrors } = await addTestimony({ ...input });
   
     if (validationErrors?.length) {
@@ -84,6 +62,7 @@ export default function TestimonyForm() {
       // queryClient.invalidateQueries({ queryKey: [QUERY_KEY.GET_ALL_ACCOUNTS] });
       form.reset();
     }
+    setLoading(false);
   };
 
   return (

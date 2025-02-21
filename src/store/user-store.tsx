@@ -1,12 +1,12 @@
-import { UserWithRelations } from '@/lib/model';
+import { User } from '@prisma/client';
 import { create } from 'zustand';
 
 
 
 
 interface UserStore {
-  user: UserWithRelations | null;
-  setUser: (user: UserWithRelations | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
   clearUser: () => void;
  
 }

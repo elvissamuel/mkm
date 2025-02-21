@@ -1,4 +1,3 @@
-import { ApprovalStatus, NotificationType } from '@prisma/client';
 import { z } from 'zod';
 
 export const userRegistrationSchema = z.object({
@@ -49,11 +48,6 @@ export const vendorSchema = z.object({
   bank_account_number: z.string().min(1, "Bank account number is required"),
 });
 
-export const kycUpdateSchema = z.object({
-  kyc_id: z.string(),
-  status: z.enum([ApprovalStatus.APPROVED, ApprovalStatus.REJECTED]),
-});
-
 export const milestoneSchema = z.object({
   id: z.string().optional(),
   description: z.string().min(1, "Description is required"),
@@ -66,11 +60,6 @@ export const milestoneSchema = z.object({
   invoice_id: z.string(),
 });
 
-
-export const invoiceUpdateSchema = z.object({
-  invoice_id: z.string(),
-  status: z.enum([ApprovalStatus.APPROVED, ApprovalStatus.REJECTED]),
-});
 export const userUpdateSchema = z.object({
   id: z.string(),
   first_name: z.string().min(1, 'First name is required'),
@@ -84,22 +73,11 @@ export const userUpdateSchema = z.object({
   new_password: z.string().min(6, 'New password must be at least 6 characters long').optional(),
 });
 
-export const fundingRequestUpdateSchema = z.object({
-  funding_request_id: z.string(),
-  status: z.enum([ApprovalStatus.APPROVED, ApprovalStatus.REJECTED]),
-});
-export const milestoneUpdateSchema = z.object({
-  id: z.string(),
-  status: z.enum([ApprovalStatus.APPROVED, ApprovalStatus.REJECTED]),
-});
-
 export const fundingRequestSchema = z.object({
   invoice_id: z.string(),
   requested_amount: z.number().min(0, "Requested amount must be non-negative"),
   your_contribution: z.number().min(0, "Your contribution must be non-negative"),
 });
-
-
 
 export const adminUpdateSchema = z.object({
   id: z.string().uuid(),
@@ -107,19 +85,4 @@ export const adminUpdateSchema = z.object({
   name: z.string().min(1, "Name is required"),
   current_password: z.string().min(8).optional(),
   new_password: z.string().min(8).optional(),
-});
-
-export const notificationSchema = z.object({
-  message: z.string().min(1, "Message is required"),
-  type: z.enum([
-    NotificationType.INVOICE_STATUS_UPDATE, 
-    NotificationType.MILESTONE_STATUS_UPDATE, 
-    NotificationType.FUNDING_STATUS_UPDATE,
-    NotificationType.SYSTEM_ALERT,
-    NotificationType.KYC_UPDATE,
-    NotificationType.INVOICE_UPDATE,
-    NotificationType.MILESTONE_UPDATE,
-    NotificationType.FUNDING_UPDATE
-  ]),
-  link: z.string().optional(),
 });

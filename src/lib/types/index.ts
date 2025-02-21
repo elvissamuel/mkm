@@ -1,4 +1,4 @@
-import { User, Admin, Notification, Permission } from '@prisma/client';
+import { User } from '@prisma/client';
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -19,11 +19,6 @@ export interface FilterParams {
 }
 
 export type UserWithRelations = User & {
-  notifications?: Notification[];
-};
-
-export type AdminWithRelations = Admin & {
-  permissions?: Permission[];
   notifications?: Notification[];
 };
 

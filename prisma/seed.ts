@@ -1,5 +1,5 @@
 // seed.ts
-import { PrismaClient, UserRole, AdminRole, NotificationType, ActivityType } from '@prisma/client';
+import { PrismaClient, UserRole, AdminRole } from '@prisma/client';
 import { hash } from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -53,16 +53,6 @@ async function seedUsers() {
   });
   console.log(`Premium user created: ${premiumUser.email}`);
 
-  // Create some notifications for users
-  await prisma.notification.create({
-    data: {
-      message: 'Welcome to the platform!',
-      type: NotificationType.SYSTEM,
-      users: {
-        connect: [{ id: user.id }, { id: premiumUser.id }]
-      }
-    }
-  });
 }
 
 async function seedAdmins() {
@@ -105,60 +95,13 @@ async function seedAdmins() {
     },
   });
   console.log(`Super Admin created: ${superAdmin.email}`);
-
-  // Create activity logs for admins
-  await prisma.activityLog.create({
-    data: {
-      action: 'System initialization',
-      type: ActivityType.CREATE,
-      admin_id: superAdmin.id,
-    }
-  });
 }
 
-async function seedPermissions() {
-  const permissions = [
-    { name: 'USER_READ', description: 'Can read user data' },
-    { name: 'USER_WRITE', description: 'Can modify user data' },
-    { name: 'USER_DELETE', description: 'Can delete users' },
-    { name: 'ADMIN_READ', description: 'Can read admin data' },
-    { name: 'ADMIN_WRITE', description: 'Can modify admin data' },
-    { name: 'SETTINGS_READ', description: 'Can read settings' },
-    { name: 'SETTINGS_WRITE', description: 'Can modify settings' },
-  ];
-
-  for (const permission of permissions) {
-    await prisma.permission.upsert({
-      where: { name: permission.name },
-      update: permission,
-      create: permission,
-    });
-  }
-  console.log('Permissions seeded');
-
-  // Assign all permissions to super admin
-  const superAdmin = await prisma.admin.findUnique({
-    where: { email: 'superadmin@example.com' }
-  });
-
-  if (superAdmin) {
-    const allPermissions = await prisma.permission.findMany();
-    await prisma.admin.update({
-      where: { id: superAdmin.id },
-      data: {
-        permissions: {
-          connect: allPermissions.map(p => ({ id: p.id }))
-        }
-      }
-    });
-  }
-}
 
 async function main() {
   try {
     await seedUsers();
     await seedAdmins();
-    await seedPermissions();
 
     console.log('Seed completed successfully');
   } catch (error) {

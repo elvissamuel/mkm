@@ -3,7 +3,6 @@
 import { ThemeProvider } from "@/providers/theme-provider"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import TRPCProvider from "./_providers/trpc-provider";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
 import Navigation from "@/components/navigation";
@@ -30,13 +29,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-            <TRPCProvider>
              <Navigation />
 
               {children}
 
               <Footer />
-            </TRPCProvider>
             <Toaster />
           </SessionProvider>
         </ThemeProvider>
