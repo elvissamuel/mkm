@@ -5,17 +5,17 @@ export default function ServicesSection() {
     {
       title: "Individuals Seeking Personal Growth",
       description:
-        "Making Kings Mentorship is for those seeking personal and professional transformation. We guide you in enhancing communication, interpersonal skills, and emotional intelligence, while helping you cultivate a balanced lifestyle, overcome challenges, and achieve greater self-awareness.",
+        "Making Kings for Nations Mentorship is for those seeking personal and professional transformation. We guide you in enhancing communication, interpersonal skills, and emotional intelligence, while helping you cultivate a balanced lifestyle, overcome challenges, and achieve greater self-awareness.",
     },
     {
       title: "Professionals",
       description:
-        "Making Kings Mentorship is for those wanting to level up their professional career, looking to stand in their truth, and professionally develop themselves to achieve their goals.",
+        "Making Kings for Nations Mentorship is for those wanting to level up their professional career, looking to stand in their truth, and professionally develop themselves to achieve their goals.",
     },
     {
       title: "Aspiring Leaders",
       description:
-        "Making Kings Mentorship is for those who want to develop the skills and qualities of a successful leader. Individuals who are passionate about helping others prosper by being social time and work to make a positive impact on the world around them.",
+        "Making Kings for Nations Mentorship is for those who want to develop the skills and qualities of a successful leader. Individuals who are passionate about helping others prosper by being social time and work to make a positive impact on the world around them.",
     },
   ]
 

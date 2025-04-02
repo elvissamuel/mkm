@@ -11,7 +11,7 @@ export default function Home() {
     <div className="min-h-screen pt-8 pb-14 bg-white">
 
       {/* Hero Section */}
-      <section className="relative bg-[#faecec] w-[80%] mx-auto rounded-3xl px-4 py-16 md:px-6 lg:px-12">
+      <section className="relative bg-[#faecec] w-[95%] md:w-[80%] mx-auto rounded-3xl px-6 py-16 md:px-6 lg:px-12">
         <div className="container mx-auto">
           <div className="grid items-center gap-8 lg:grid-cols-2">
             <div className="max-w-xl">
@@ -19,7 +19,7 @@ export default function Home() {
                 Transform Your Life with Intentional Growth
               </h1>
               <p className="mt-4 text-lg text-gray-600">
-                Join Coach Mentors Private Membership Program to Create Lasting Shifts in Career Development and
+                Join Coach Mimie&apos;s Proven Mentorship Program to Create Lasting Shifts in Career, relationship and
                 Personal Development
               </p>
               <div className="mt-8 flex gap-4">
