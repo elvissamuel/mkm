@@ -8,7 +8,7 @@ import MentorshipOffers from "@/components/mentorship-offer"
 
 export default function Home() {
   return (
-    <div className="min-h-screen pt-8 bg-white">
+    <div className="min-h-screen pt-8 pb-14 bg-white">
 
       {/* Hero Section */}
       <section className="relative bg-[#faecec] w-[80%] mx-auto rounded-3xl px-4 py-16 md:px-6 lg:px-12">
@@ -52,7 +52,7 @@ export default function Home() {
       <TestimonialsSection />
 
       {/* Newsletter Section */}
-      <section className="bg-[#faecec] py-16 text-black w-[80%] mx-auto mb-8 rounded-3xl">
+      <section className="bg-[#faecec] py-16 text-black w-[80%] mx-auto  rounded-3xl">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-serif text-3xl font-bold">Explore More with Us Today</h2>

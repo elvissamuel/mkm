@@ -1,10 +1,14 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 
 export default function Navigation() {
   return (
-    <nav className="border-b bg-white px-4 py-4">
+    <nav className="border-b border-gray-200 bg-white px-4 py-4">
       <div className="container mx-auto flex items-center justify-between">
+        <div className="border bg-slate-950 w-16 h-16">
+          <Image src="/mkm-logo2.png" alt="mkm-logo" className="object-contain w-full h-full" width={100} height={100} />
+        </div>
         <div className="flex items-center gap-8 text-black">
           <div className="hidden space-x-6 md:flex">
             <Link href="/" className="text-sm hover:text-gray-600">
