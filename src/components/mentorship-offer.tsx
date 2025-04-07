@@ -72,7 +72,7 @@ export default function MentorshipOffers() {
     <section className="overflow-hidden bg-white py-16">
       <div className="container mx-auto px-4">
         <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <h2 className="font-serif text-2xl font-bold text-black sm:text-3xl">What Making Kings Mentorship Offers:</h2>
+          <h2 className="font-serif text-2xl font-bold text-black sm:text-3xl">What Making Kings for Nations Offers:</h2>
           <div className="flex gap-2">
             <Button
               variant="outline"
