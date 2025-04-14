@@ -8,20 +8,20 @@ import Link from "next/link"
 export default function ProgramsPage() {
   const programs = [
     {
-      title: "Regular Mentorship Program",
+      title: "Mentorship for Singles",
       description: "Making Kings Mentorship is an academy that is committed to empowering individuals with tools, resources, and teachings to enable them to have rounded success as a balance to family life and wellness.",
       coachNote: "Coach Mimie is set to walk you into intentional growth and transformation.",
       impact: "This mentorship program will bring about significant shifts in different areas of your life.",
       callToAction: "Register now to be a part of this life transforming program.",
       features: [
-        "Monthly group coaching session",
+        "Prepare you for relationship and marriage",
+        "Close community",
+        "Coaching calls with PM",
         "Accountability structure",
-        "Access to weekly inspiring emails",
-        "Access to special resources and materials",
       ],
-      price: "$6.45",
-      localPrice: "₦10,000",
-      period: "Monthly Investment Fee",
+      price: "$78",
+      localPrice: "₦120,000",
+      period: "Annual Investment Fee",
     },
     {
       title: "Premium Mentorship Program",
@@ -60,7 +60,7 @@ export default function ProgramsPage() {
             </div>
             <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-gray-100">
               <Image
-                src="/placeholder.svg?height=300&width=500"
+                src="/mentorship-img2.png"
                 alt="Programs Overview"
                 fill
                 className="object-cover"

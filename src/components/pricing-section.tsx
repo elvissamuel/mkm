@@ -5,24 +5,24 @@ import Link from "next/link"
 
 export default function PricingSection() {
   const plans = [
-    // {
-    //   title: "Regular Mentorship Program",
-    //   price: "$6.45",
-    //   localPrice: "₦10,000",
-    //   period: "Monthly Investment Fee",
-    //   features: [
-    //     "Monthly group coaching session",
-    //     "Monthly workbook",
-    //     "Accountability structure",
-    //     "", // Empty strings for alignment with premium plan
-    //     "",
-    //   ],
-    // },
     {
-      title: "Premium Mentorship Program",
+      title: "Mentorship for Singles",
+      price: "$78",
+      localPrice: "₦120,000",
+      period: "Annual Investment Fee",
+      features: [
+        "Prepare you for relationship and marriage",
+        "Close community",
+        "Coaching calls with PM",
+        "Accountability structure",
+        "", // Empty strings for alignment with premium plan
+      ],
+    },
+    {
+      title: "Yearly Mentorship Program",
       price: "$161.20",
       localPrice: "₦250,000",
-      period: "One Time Annual Investment Fee",
+      period: "Annual Investment Fee",
       features: [
         "Monthly group coaching session",
         "Access to one on one sessions when needed",
@@ -38,7 +38,7 @@ export default function PricingSection() {
       <div className="container mx-auto px-4">
         <h2 className="mb-2 text-center text-gray-900 font-serif text-3xl font-bold">Programs Available</h2>
         <p className="mb-12 text-center text-gray-600">Choose Your Path to Transformation</p>
-        <div className=" mx-auto w-[320px] md:w-[600px]">
+        <div className=" grid grid-cols-2 gap-8">
           {plans.map((plan, index) => (
             <Card key={index} className="flex flex-col bg-transparent p-6 text-gray-800">
               <div className="mb-4">

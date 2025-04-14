@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default function AboutPage() {
   return (
@@ -55,24 +56,17 @@ export default function AboutPage() {
               <h3 className="font-serif text-2xl font-bold">Meet Coach Mimie</h3>
               <div className="space-y-4">
                 <p className="text-gray-700">
-                  Pastor Mimie Taryl Lee-Lus, fondly called Pastor Mimie, is the Conveyer of House of Balance Global
-                  Network, Founder of Sweet Love with Purpose Academy, and a certified John Maxwell Leadership
-                  professional Coach and Pastor of Light Nation Church Global.
+                  Pastor Miracle Femi Lazarus, fondly called Pastor Mimie, is the Convener of House of Blessica Global
+                  Network, Founder of Sweet Love with Purpose Academy, Lead Coach at Making Kings Mentorship and Co-LeadPastor of Light Nation Church Global.
                 </p>
                 <p className="text-gray-700">
-                  Pastor Mimie is an ordained lover of God, a woman of great insight, and a public speaker who
-                  communicates her messages with relatability, simplicity, and humor. She is passionate about creating
-                  safe and supportive spaces in any environment she finds herself in.
+                  Pastor Mimie is an ardent lover of God, a woman of great insight, and a public speaker who
+                  communicates her messages with relatability, simplicity, and humor. She is a beautiful soul who radiates love and dispense joy into any environment she finds herself in.
                 </p>
                 <p className="text-gray-700">
                   She is the Lead Coach in Making Kings Mentorship platform where she helps both men and women with
                   identity and purpose discovery and personal development.
                 </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <Button variant="outline" className="bg-[#B8860B] text-white hover:bg-[#8B6508]">
-                  Learn More About the Team
-                </Button>
               </div>
             </div>
             <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-3xl bg-gray-100">
@@ -88,7 +82,9 @@ export default function AboutPage() {
             <p className="mb-6 text-gray-700">
               Discover the Making Kings Mentorship programs designed to empower you on your journey to success.
             </p>
-            <Button className="bg-black text-white hover:bg-gray-800">Explore Programs</Button>
+            <Link href={"/programs"}>
+              <Button className="bg-black text-white hover:bg-gray-800">Explore Programs</Button>
+            </Link>
           </div>
         </section>
       </main>
