@@ -38,7 +38,7 @@ export default function PricingSection() {
       <div className="container mx-auto px-4">
         <h2 className="mb-2 text-center text-gray-900 font-serif text-3xl font-bold">Programs Available</h2>
         <p className="mb-12 text-center text-gray-600">Choose Your Path to Transformation</p>
-        <div className=" grid grid-cols-2 gap-8">
+        <div className=" grid md:grid-cols-2 gap-8">
           {plans.map((plan, index) => (
             <Card key={index} className="flex flex-col bg-transparent p-6 text-gray-800">
               <div className="mb-4">
