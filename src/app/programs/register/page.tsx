@@ -190,7 +190,7 @@ export default function ProgramRegistration() {
                 </div>
               </div>
 
-              <FormField
+              {/* <FormField
                 control={form1.control}
                 name="address"
                 render={({ field }) => (
@@ -216,7 +216,7 @@ export default function ProgramRegistration() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <FormField

@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
 import Navigation from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import ReactQueryProvider from "./react-query-context";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <meta name="description" content={"Making Kings Mentorship"} />
       </head>
       <body className={inter.className}>
+        <ReactQueryProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -37,6 +39,7 @@ export default function RootLayout({
             <Toaster />
           </SessionProvider>
         </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   )

@@ -10,17 +10,24 @@ datasource db {
 
 // Base models with common fields
 model User {
-  id                 String         @id @default(uuid())
-  email              String         @unique
+  id                 String             @id @default(uuid())
+  email              String             @unique
   password           String
   first_name         String
   last_name          String
-  is_email_verified  Boolean        @default(false)
-  is_active         Boolean        @default(true)
-  created_at         DateTime       @default(now())
-  updated_at         DateTime       @updatedAt
+  phone_number       String?
+  city               String?
+  country            String?
+  payment_amount     Int?
+  status             String?            // fully_paid, partially_paid, not_paid
+  is_email_verified  Boolean            @default(false)
+  is_active          Boolean            @default(true)
+  programs           Program[]          
+  user_subscriptions UserSubscription[] @relation("UserSubscriptions")
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @updatedAt
   deleted_at         DateTime?
-  role              UserRole       @default(USER)
+  role               UserRole           @default(USER)
 
   @@index([deleted_at, is_active, is_email_verified])
   @@map(name: "user")
@@ -73,15 +80,37 @@ model Testimony {
 }
 
 model Program {
-  id                 String         @id @default(uuid())
-  name               String
-  features           String         //comma seperated strings
+  id                 String             @id @default(uuid())
+  name               String             @unique
+  features           String             // comma separated strings
   duration           String
   price              Int
-  created_at         DateTime       @default(now())
-  updated_at         DateTime       @updatedAt
+  user_id            String?
+  user               User?              @relation(fields: [user_id], references: [id])
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @updatedAt
   deleted_at         DateTime?
+  user_subscriptions UserSubscription[] @relation("UserSubscriptions")
 
   @@index([deleted_at, name])
   @@map(name: "program")
+}
+
+model UserSubscription {
+  id                 String       @id @default(uuid())
+  user_id            String
+  program_id         String
+  payment_status     String       // fully_paid, partially_paid, not_paid
+  start_date         DateTime     @default(now())
+  end_date           DateTime?
+  amount_paid        Int          // Track how much has been paid
+  remaining_amount   Int          // Amount left to pay
+  user               User         @relation("UserSubscriptions", fields: [user_id], references: [id])
+  program            Program      @relation("UserSubscriptions", fields: [program_id], references: [id])
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @updatedAt
+  deleted_at         DateTime?
+
+  @@index([user_id, program_id, deleted_at])
+  @@map(name: "user_subscription")
 }
