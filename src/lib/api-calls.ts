@@ -49,7 +49,7 @@ async function handleApiCalls<T> (response: Response): Promise<IApiResponse<T>> 
 // };
 
 export const addTestimony = async (input: z.infer<typeof testimonyFormSchema>): Promise<IApiResponse<Testimony>> => {
-  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "/api/testimony", {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/testimony", {
     method: "POST",
     body: JSON.stringify(input),
   }));
