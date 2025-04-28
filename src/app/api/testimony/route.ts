@@ -18,9 +18,28 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(testimony);
+    const response = NextResponse.json(testimony);
+    
+    // CORS Headers
+    response.headers.set('Access-Control-Allow-Origin', 'https://www.makingkingsfornations.com');  // Set your frontend URL here
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    return response;
   } catch (error) {
     console.error("Error creating testimony:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+}
+
+// You may also need to handle OPTIONS method for preflight requests (CORS preflight)
+export async function OPTIONS() {
+  const response = new NextResponse(null, { status: 200 });
+
+  // CORS Headers
+  response.headers.set('Access-Control-Allow-Origin', 'https://www.makingkingsfornations.com');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  return response;
 }
