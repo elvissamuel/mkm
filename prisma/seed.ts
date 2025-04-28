@@ -4,6 +4,31 @@ import { hash } from 'bcrypt';
 
 const prisma = new PrismaClient();
 
+const programs = [
+  {
+    title: "Mentorship for Singles",
+    price: 78,
+    features: [
+      "Prepare you for relationship and marriage",
+      "Close community",
+      "Coaching calls with PM",
+      "Accountability structure",
+    ],
+    duration: "Annual Investment Fee",
+  },
+  {
+    title: "Premium Mentorship Program",
+    price: 161.20,
+    features: [
+      "Monthly group coaching session",
+      "Accountability structure",
+      "Access to weekly inspiring email",
+      "Access to special resources and material",
+    ],
+    duration: "One Time Annual Investment Fee",
+  },
+];
+
 async function seedUsers() {
   // Create a regular user
   const user = await prisma.user.upsert({
@@ -97,11 +122,36 @@ async function seedAdmins() {
   console.log(`Super Admin created: ${superAdmin.email}`);
 }
 
+async function seedPrograms() {
+
+  for (const program of programs) {
+    // const localPrice = convertPriceToLocal(program.price);
+    const createdProgram = await prisma.program.upsert({
+      where: { name: program.title },
+      update: {
+        name: program.title,
+        features: program.features.join(", "), // Join features as a comma-separated string
+        price: program.price,
+        duration: program.duration,
+      },
+      create: {
+        name: program.title,
+        features: program.features.join(", "), // Join features as a comma-separated string
+        price: program.price,
+        duration: program.duration,
+      },
+    });
+    console.log(`Program created: ${createdProgram.name}`);
+  }
+
+}
+
 
 async function main() {
   try {
     await seedUsers();
     await seedAdmins();
+    await seedPrograms();
 
     console.log('Seed completed successfully');
   } catch (error) {

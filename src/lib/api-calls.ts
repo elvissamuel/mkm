@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { IApiError, IApiResponse, IValidationError } from "./model";
-import { testimonyFormSchema } from "./validation-schema";
-import { Testimony } from "@prisma/client";
+import { getById, PersonalInfoSchema, testimonyFormSchema } from "./validation-schema";
+import { Program, Testimony, User } from "@prisma/client";
 
 
 async function handleValidationResponse (response: Response) {
@@ -52,5 +52,30 @@ export const addTestimony = async (input: z.infer<typeof testimonyFormSchema>): 
   return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/testimony", {
     method: "POST",
     body: JSON.stringify(input),
+  }));
+};
+
+export const getPrograms = async (): Promise<IApiResponse<Program[]>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/program", { method: "GET" }));
+};
+
+export const getSingleProgram = async (input: z.infer<typeof getById>): Promise<IApiResponse<Program>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/program", {
+    method: "POST",
+    body: JSON.stringify(input),
+  }));
+};
+
+export const registerUser = async (input: PersonalInfoSchema): Promise<IApiResponse<User>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/register", {
+    method: "POST",
+    body: JSON.stringify(input),
+  }));
+};
+
+export const sendEmail = async (): Promise<IApiResponse<User>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/send", {
+    method: "POST",
+    // body: JSON.stringify(input),
   }));
 };
