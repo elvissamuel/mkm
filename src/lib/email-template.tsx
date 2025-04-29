@@ -101,8 +101,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({ user }) 
               margin: "0 0 20px 0",
             }}
           >
-            Our mission is to empower and guide you toward becoming a leader who makes a positive impact in your
-            community and beyond.
+            Our mission is to equip and empower you with the insights, tools and resources needed to make you a better person and leader
           </p>
 
           <div

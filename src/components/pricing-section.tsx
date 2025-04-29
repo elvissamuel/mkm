@@ -10,7 +10,7 @@ import { Program } from "@prisma/client"
 import { convertPriceToLocal } from "@/lib/utils"
 
 export default function PricingSection() {
-  const [program, setProgram] = useState<Program[]>([]);
+  const [program, setProgram] = useState<(Program & {local_price: string})[]>([]);
 
   useQuery({
     queryKey: [QUERY_KEY.GET_ALL_PROGRAMS],
@@ -18,7 +18,12 @@ export default function PricingSection() {
       const { data, error, validationErrors } = await getPrograms();
 
       if (data) {
-        setProgram(data);
+        setProgram(
+          data.map(item => ({
+            ...item,
+            local_price: item.price === 78 ? "120,000" : "250,000"
+          }))
+        );
       }
 
       if (validationErrors?.length) {
@@ -47,7 +52,7 @@ export default function PricingSection() {
 
               <div className="mb-6">
                 <p className="text-3xl font-bold">
-                  ${plan.price} <span className="text-lg text-gray-600">({convertPriceToLocal(plan.price)})</span>
+                  ${plan.price} <span className="text-lg text-gray-600">₦{plan.local_price}</span>
                 </p>
                 <p className="text-sm text-gray-600">{plan.duration}</p>
               </div>

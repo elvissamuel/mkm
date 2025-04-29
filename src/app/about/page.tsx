@@ -42,8 +42,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="mb-4 font-serif text-2xl font-bold">Our Vision</h2>
             <p className="text-gray-700">
-              Making Kings Mentorship is an academy that is committed to empowering individuals with tools, resources,
-              and teachings to enable them to have rounded success as a balance to family life and wellness.
+            To raise and empower kingly individuals to have rounded success and growth.
             </p>
           </div>
         </section>
