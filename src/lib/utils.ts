@@ -24,7 +24,7 @@ export const convertPriceToLocal = (price: number): string => {
   // Here you can implement a real conversion logic
   // Example: if the price is in dollars, convert it to local currency (₦)
   // const dollarValue = parseFloat(price.replace('$', ''));
-  const conversionRate = 1500; // Example conversion rate
+  const conversionRate = 1550; // Example conversion rate
   const localPrice = price * conversionRate;
 
   return `₦${localPrice.toLocaleString()}`;

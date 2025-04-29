@@ -32,9 +32,9 @@ export async function POST(req: NextRequest) {
       const { error } = await resend.emails.send({
             from: 'MakingKings-Admin <admin@makingkingsfornations.com>',
             to: [`${user.email}`],
-            subject: 'Congratulations',
+            subject: 'Welcome',
             react: EmailTemplate({ user: user }),
-            text: "Testing the text"
+            text: "MKM2025"
           });
       
           if (error) {
