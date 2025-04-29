@@ -19,7 +19,6 @@ export default function PricingSection() {
 
       if (data) {
         setProgram(data);
-        console.log("program data: ", data);
       }
 
       if (validationErrors?.length) {

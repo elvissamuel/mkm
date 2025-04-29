@@ -17,6 +17,7 @@ import PayazaCheckout from "payaza-web-sdk";
 import { PersonalInfoSchema, personalInfoSchema } from "@/lib/validation-schema"
 import { useToast } from "@/hooks/use-toast"
 import { ConnectionMode } from "payaza-web-sdk/lib/PayazaCheckout"
+import { convertPriceToLocal } from "@/lib/utils"
 
 
 export default function ProgramRegistration() {
@@ -26,7 +27,7 @@ export default function ProgramRegistration() {
   const [user, setUser] = useState<User>({} as User)
 
    useQuery({
-      queryKey: [QUERY_KEY.GET_ALL_PROGRAMS],
+      queryKey: [QUERY_KEY.GET_SINGLE_PROGRAM],
       queryFn: async () => {
         const { data, error, validationErrors } = await getSingleProgram({id: params.id});
   
@@ -48,16 +49,18 @@ export default function ProgramRegistration() {
     });
 
     useEffect(()=> {
+      const price = convertPriceToLocal(program.price)
+
       const payazaCheckout = new PayazaCheckout({
-        merchant_key: "PZ78-PKTEST-6B20E56B-2639-49E3-8926-0AC8363EDF8C",
+        merchant_key: process.env.NEXT_PUBLIC_PAYAZA_MERCHANT_KEY as string,
         connection_mode: ConnectionMode.TEST, // Live || Test
-        checkout_amount: Number(2000),
+        checkout_amount: Number(parseFloat(price.replace('₦', ''))),
         currency_code: "NGN",   
         email_address: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
         phone_number: user.phone_number as string,
-        transaction_reference: 'your_reference',
+        transaction_reference: `mkm-premium-${user.first_name}`,
         currency: "NG",
     
         onClose: function() {
@@ -112,7 +115,7 @@ export default function ProgramRegistration() {
       toast({
         variant: "default",
         title: "Success",
-        description: "User created successfully!",
+        description: "Successful!",
       });
       
       setUser(data);
@@ -253,7 +256,7 @@ export default function ProgramRegistration() {
 
               <div className="flex justify-between pt-6">
                 <div>
-                  <button onClick={() => sendEmail()} type="button">Payaza</button>
+                  {/* <button onClick={() => sendEmail()} type="button">Payaza</button> */}
                 </div>
                 <Button type="submit" className="bg-[#B8860B] hover:bg-[#8B6508]">
                   {form.formState.isSubmitting ? "Submitting..." : "Proceed to Pay"}

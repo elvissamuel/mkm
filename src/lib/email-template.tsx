@@ -124,33 +124,6 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({ user }) 
       </tr>
     </table>
 
-    {/* User Information */}
-    <table
-      width="100%"
-      cellPadding="0"
-      cellSpacing="0"
-      style={{
-        marginBottom: "20px",
-        borderTop: "1px solid #e0e0e0",
-        borderBottom: "1px solid #e0e0e0",
-        padding: "15px 0",
-      }}
-    >
-      <tr>
-        <td style={{ padding: "10px 0" }}>
-          <p
-            style={{
-              color: "#777777",
-              fontSize: "14px",
-              margin: "0",
-            }}
-          >
-            <strong>Email:</strong> {user.email}
-          </p>
-        </td>
-      </tr>
-    </table>
-
     {/* Footer */}
     <table width="100%" cellPadding="0" cellSpacing="0">
       <tr>
@@ -172,8 +145,8 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({ user }) 
             }}
           >
             If you have any questions, please contact us at{" "}
-            <a href="mailto:support@makingkings.org" style={{ color: "#4a5568" }}>
-              support@makingkings.org
+            <a href="mailto:admin@makingkings.org" style={{ color: "#4a5568" }}>
+              admin@makingkings.org
             </a>
           </p>
         </td>
