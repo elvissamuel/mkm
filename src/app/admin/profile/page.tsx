@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useToast } from "@/hooks/use-toast"
 
 // Mock admin data - in a real app, you would fetch this from your API
 const mockAdmin = {
@@ -27,6 +27,7 @@ export default function AdminProfile() {
     email: mockAdmin.email,
     role: mockAdmin.role,
   })
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
