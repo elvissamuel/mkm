@@ -17,11 +17,12 @@ const programs = [
     duration: "Annual Investment Fee",
   },
   {
-    title: "Premium Mentorship Program",
+    title: "Yearly Mentorship Program",
     price: 161.20,
     features: [
       "Monthly group coaching session",
       "Accountability structure",
+      "Payment allowed in two installments",
       "Access to weekly inspiring email",
       "Access to special resources and material",
     ],
@@ -120,6 +121,25 @@ async function seedAdmins() {
     },
   });
   console.log(`Super Admin created: ${superAdmin.email}`);
+
+  const makingKingAdmin = await prisma.admin.upsert({
+    where: { email: 'admin@makingkingsfornations.com' },
+    update: {
+      email: 'admin@makingkingsfornations.com',
+      password: await hash('superadmin123', 10),
+      name: 'Super Admin',
+      role: AdminRole.SUPER_ADMIN,
+      is_active: true,
+    },
+    create: {
+      email: 'admin@makingkingsfornations.com',
+      password: await hash('superadmin123', 10),
+      name: 'Super Admin',
+      role: AdminRole.SUPER_ADMIN,
+      is_active: true,
+    },
+  });
+  console.log(`Making Kings Admin created: ${makingKingAdmin.email}`);
 }
 
 async function seedPrograms() {

@@ -15,7 +15,7 @@ export default function ServicesSection() {
     {
       title: "Aspiring Leaders",
       description:
-        "Making Kings for Nations Mentorship is for those who want to develop the skills and qualities of a successful leader. Individuals who are passionate about helping others prosper by being social time and work to make a positive impact on the world around them.",
+        "Making Kings for Nations Mentorship is for those who want to develop the skills and qualities of a successful leader. Individuals who are passionate about helping others prosper by being socially active and dedicating their time and work to making a positive impact on the world around them.",
     },
   ]
 

@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Navigation from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import ReactQueryProvider from "./react-query-context";
+import { usePathname } from 'next/navigation';
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -16,6 +17,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -31,11 +33,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-             <Navigation />
+             {!pathname.includes("admin") && <Navigation />}
 
               {children}
 
-              <Footer />
+              {!pathname.includes("admin") && <Footer />}
             <Toaster />
           </SessionProvider>
         </ThemeProvider>

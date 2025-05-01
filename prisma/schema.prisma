@@ -68,6 +68,7 @@ model Testimony {
   last_name          String?
   phone_number       String?
   city               String?
+  approved           Boolean?      @default(false)
   country            String?
   testimony          String
   created_at         DateTime       @default(now())
