@@ -1,45 +1,85 @@
+"use client"
+
 import Image from "next/image"
 import { Check } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { useQuery } from "@tanstack/react-query"
+import { useState } from "react"
+import { getPrograms } from "@/lib/api-calls"
+import { QUERY_KEY } from "@/lib/rbac"
+import { Program } from "@prisma/client"
 
 export default function ProgramsPage() {
-  const programs = [
-    {
-      title: "Mentorship for Singles",
-      description: "Making Kings Mentorship is an academy that is committed to empowering individuals with tools, resources, and teachings to enable them to have rounded success as a balance to family life and wellness.",
-      coachNote: "Coach Mimie is set to walk you into intentional growth and transformation.",
-      impact: "This mentorship program will bring about significant shifts in different areas of your life.",
-      callToAction: "Register now to be a part of this life transforming program.",
-      features: [
-        "Prepare you for relationship and marriage",
-        "Close community",
-        "Coaching calls with PM",
-        "Accountability structure",
-      ],
-      price: "$78",
-      localPrice: "₦120,000",
-      period: "Annual Investment Fee",
-    },
-    {
-      title: "Premium Mentorship Program",
-      description: "Making Kings Mentorship is an academy that is committed to empowering individuals with tools, resources, and teachings to enable them to have rounded success as a balance to family life and wellness.",
-      coachNote: "Coach Mimie is set to walk you into intentional growth and transformation.",
-      impact: "This mentorship program will bring about significant shifts in different areas of your life.",
-      callToAction: "Register now to be a part of this life transforming program.",
-      features: [
-        "Monthly group coaching session",
-        "Accountability structure",
-        "Access to weekly inspiring email",
-        "Access to special resources and material",
-      ],
-      price: "$161.20",
-      localPrice: "₦250,000",
-      period: "One Time Annual Investment Fee",
-    },
-  ]
+  const [programs, setPrograms] = useState<(Program & {local_price: string, description: string, impact: string, callToAction: string, coachNote: string})[]>([]);
+  
+    useQuery({
+      queryKey: [QUERY_KEY.GET_ALL_PROGRAMS],
+      queryFn: async () => {
+        const { data, error, validationErrors } = await getPrograms();
+  
+        if (data) {
+          setPrograms(
+            data.map(item => ({
+              ...item,
+              local_price: item.price === 78 ? "120,000" : "250,000",
+              description: item.price === 78 ? "Singleness isn’t just a waiting room; it’s a season of preparation, purpose, and personal growth.  We’re excited to launch a transformational mentorship space just for singles where you’ll be equipped to live whole, walk in clarity, and embrace your season with wisdom and intention.  This is more than mentorship. It is alignment for destiny.  Are you ready?" : "Making Kings Mentorship is an academy that is committed to empowering individuals with tools, resources, and teachings to enable them to have rounded success as a balance to family life and wellness.",
+              impact: "This mentorship program will bring about significant shifts in different areas of your life.",
+              callToAction: "Register now to be a part of this life transforming program.",
+              coachNote: "Coach Mimie is set to walk you into intentional growth and transformation."
+
+            }))
+          );
+        }
+  
+        if (validationErrors?.length) {
+          console.error(validationErrors);
+  
+          return;
+        }
+  
+        if (error) {
+          console.error(error);
+        }
+      }
+    });
+  // const programs = [
+  //   {
+  //     title: "Mentorship for Singles",
+  //     description: "Singleness isn’t just a waiting room; it’s a season of preparation, purpose, and personal growth.  We’re excited to launch a transformational mentorship space just for singles where you’ll be equipped to live whole, walk in clarity, and embrace your season with wisdom and intention.  This is more than mentorship. It is alignment for destiny.  Are you ready?",
+  //     coachNote: "",
+  //     impact: "This mentorship program will bring about significant shifts in different areas of your life.",
+  //     callToAction: "Register now to be a part of this life transforming program.",
+  //     features: [
+  //       "Prepare you for relationship and marriage",
+  //       "Close community",
+  //       "Coaching calls with PM",
+  //       "Accountability structure",
+  //     ],
+  //     price: "$78",
+  //     localPrice: "₦120,000",
+  //     period: "Annual Investment Fee",
+  //   },
+  //   {
+  //     title: "Premium Mentorship Program",
+  //     description: "Making Kings Mentorship is an academy that is committed to empowering individuals with tools, resources, and teachings to enable them to have rounded success as a balance to family life and wellness.",
+  //     coachNote: "Coach Mimie is set to walk you into intentional growth and transformation.",
+  //     impact: "This mentorship program will bring about significant shifts in different areas of your life.",
+  //     callToAction: "Register now to be a part of this life transforming program.",
+  //     features: [
+  //       "Monthly group coaching session",
+  //       "Accountability structure",
+  //       "Payment allowed in two installments",
+  //       "Access to weekly inspiring email",
+  //       "Access to special resources and material",
+  //     ],
+  //     price: "$161.20",
+  //     localPrice: "₦250,000",
+  //     period: "One Time Annual Investment Fee",
+  //   },
+  // ]
 
   return (
     <div className="min-h-screen bg-white text-black">
@@ -77,7 +117,7 @@ export default function ProgramsPage() {
                 variant="secondary"
                 className="rounded-full bg-gray-900 px-6 py-2 text-base font-medium text-white hover:bg-gray-800"
               >
-                {program.title}
+                {program.name}
               </Badge>
               <div className="space-y-4">
                 <p className="text-gray-700">{program.description}</p>
@@ -88,7 +128,7 @@ export default function ProgramsPage() {
               <div>
                 <h3 className="mb-4 font-medium">Key Features:</h3>
                 <ul className="space-y-3">
-                  {program.features.map((feature, idx) => (
+                  {program.features.split(',').map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-2">
                       <Check className="h-5 w-5 text-green-500" />
                       <span>{feature}</span>
@@ -99,10 +139,10 @@ export default function ProgramsPage() {
               <div>
                 <div className="mb-2">
                   <span className="text-2xl font-bold">{program.price}</span>{" "}
-                  <span className="text-gray-600">({program.localPrice})</span>
+                  <span className="text-gray-600">({program.local_price})</span>
                 </div>
-                <p className="mb-4 text-sm text-gray-600">{program.period}</p>
-                <Link href={"/programs/register"}>
+                <p className="mb-4 text-sm text-gray-600">{program.duration}</p>
+                <Link href={`/programs/${program.id}`}>
                   <Button className="bg-[#B8860B] hover:bg-[#8B6508]">
                     Register Now
                   </Button>

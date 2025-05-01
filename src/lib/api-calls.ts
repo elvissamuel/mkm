@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { IApiError, IApiResponse, IValidationError } from "./model";
-import { getById, PersonalInfoSchema, testimonyFormSchema } from "./validation-schema";
+import { DashboardStats, IApiError, IApiResponse, IValidationError, TestimoniesResponse, UsersResponse, UserWithSubscriptions } from "./model";
+import { ApproveTestimonySchema, CreateProgramSchema, getById, PersonalInfoSchema, ProgramIdSchema, testimonyFormSchema, UpdateProgramSchema } from "./validation-schema";
 import { Program, Testimony, User } from "@prisma/client";
 
 
@@ -44,10 +44,6 @@ async function handleApiCalls<T> (response: Response): Promise<IApiResponse<T>> 
   }
 }
 
-// export const getClientAddresses = async (id: string): Promise<IApiResponse<IAddress[]>> => {
-//   return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "/api/addresses/clients/" + id, { method: "GET" }));
-// };
-
 export const addTestimony = async (input: z.infer<typeof testimonyFormSchema>): Promise<IApiResponse<Testimony>> => {
   return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/testimony", {
     method: "POST",
@@ -79,3 +75,125 @@ export const sendEmail = async (): Promise<IApiResponse<User>> => {
     // body: JSON.stringify(input),
   }));
 };
+
+export const getUsers = async (
+  page = 1,
+  limit = 10,
+  role?: "USER" | "PREMIUM" | "ALL",
+  search?: string,
+  sortBy?: string,
+  sortOrder?: "asc" | "desc",
+): Promise<IApiResponse<UsersResponse>> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  })
+
+  if (role) params.append("role", role)
+  if (search) params.append("search", search)
+  if (sortBy) params.append("sortBy", sortBy)
+  if (sortOrder) params.append("sortOrder", sortOrder)
+
+  return handleApiCalls(
+    await fetch(`${process.env.NEXT_PUBLIC_BROWSER_URL}api/users?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+  )
+}
+
+export const getUserById = async (id: string): Promise<IApiResponse<UserWithSubscriptions>> => {
+  return handleApiCalls(
+    await fetch(`${process.env.NEXT_PUBLIC_BROWSER_URL}api/users/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+  )
+}
+
+// Testimony API calls
+export const getTestimonies = async (
+  page = 1,
+  limit = 10,
+  search?: string,
+  sortBy?: string,
+  sortOrder?: "asc" | "desc",
+): Promise<IApiResponse<TestimoniesResponse>> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  })
+
+  if (search) params.append("search", search)
+  if (sortBy) params.append("sortBy", sortBy)
+  if (sortOrder) params.append("sortOrder", sortOrder)
+
+  return handleApiCalls(
+    await fetch(`${process.env.NEXT_PUBLIC_BROWSER_URL}api/testimony?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+  )
+}
+
+export const getTestimonyById = async (id: string): Promise<IApiResponse<Testimony>> => {
+  return handleApiCalls(
+    await fetch(`${process.env.NEXT_PUBLIC_BROWSER_URL}api/testimony/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+  )
+}
+
+// Dashboard stats API call
+export const getDashboardStats = async (): Promise<IApiResponse<DashboardStats>> => {
+  return handleApiCalls(
+    await fetch(`${process.env.NEXT_PUBLIC_BROWSER_URL}api/dashboard-stats`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }),
+  )
+}
+
+export const createProgram = async (input: CreateProgramSchema): Promise<IApiResponse<Program>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/program", {
+    method: "POST",
+    body: JSON.stringify(input),
+  }));
+};
+
+export const deleteProgram = async (input: ProgramIdSchema): Promise<IApiResponse<Program>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/program", {
+    method: "DELETE",
+    body: JSON.stringify(input),
+  }));
+};
+
+export const editProgram = async (input: UpdateProgramSchema): Promise<IApiResponse<Program>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/program", {
+    method: "PUT",
+    body: JSON.stringify(input),
+  }));
+};
+
+export const approveTestimony = async (data: ApproveTestimonySchema): Promise<IApiResponse<Testimony>> => {
+  return handleApiCalls(
+    await fetch(`${process.env.NEXT_PUBLIC_BROWSER_URL}api/testimony`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }),
+  )
+}

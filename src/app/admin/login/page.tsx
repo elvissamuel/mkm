@@ -2,14 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import Cookies from "js-cookie"
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("")
@@ -17,25 +18,55 @@ export default function AdminLogin() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard"
+
+  useEffect(() => {
+    // Check if already authenticated
+    const token = Cookies.get("admin-token")
+    if (token) {
+      router.push("/admin/dashboard")
+    }
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError("")
 
-    // In a real application, you would validate credentials against your database
-    // This is a simplified example
     try {
-      // Mock authentication - replace with actual authentication logic
-      if (email === "admin@example.com" && password === "password") {
-        // Set authentication state/cookie
-        localStorage.setItem("adminAuth", "true")
-        router.push("/admin/dashboard")
-      } else {
-        setError("Invalid email or password")
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed")
       }
-    } catch (err) {
-      setError("An error occurred during login")
+
+      // Set the token in a cookie
+      Cookies.set("admin-token", data.token, { expires: 1 }) // 1 day expiry
+
+      // Store admin info in localStorage for UI purposes
+      localStorage.setItem(
+        "adminUser",
+        JSON.stringify({
+          id: data.admin.id,
+          name: data.admin.name,
+          email: data.admin.email,
+          role: data.admin.role,
+        }),
+      )
+
+      // Redirect to dashboard or callback URL
+      router.push(callbackUrl)
+    } catch (err: any) {
+      setError(err.message || "An error occurred during login")
       console.error(err)
     } finally {
       setLoading(false)
