@@ -11,32 +11,56 @@ import { cn } from "@/lib/utils"
 import Cookies from "js-cookie"
 import Image from "next/image"
 
+// Helper function to get cookie value
+const getCookie = (name: string) => {
+  // Try js-cookie first
+  const jsCookie = Cookies.get(name)
+  if (jsCookie) return jsCookie
+
+  // Fallback to document.cookie
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(';').shift()
+  return undefined
+}
+
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [adminUser, setAdminUser] = useState<any>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = Cookies.get("admin-token")
-    const userStr = localStorage.getItem("adminUser")
+    const checkAuth = () => {
+      try {
+        const token = getCookie("admin-token")
+        const userStr = localStorage.getItem("adminUser")
 
-    if (token && userStr) {
-      setIsAuthenticated(true)
-      setAdminUser(JSON.parse(userStr))
-    } else if (!pathname.includes("/admin/login")) {
-      router.push("/admin/login")
+        if (token && userStr) {
+          setIsAuthenticated(true)
+          setAdminUser(JSON.parse(userStr))
+        } else if (!pathname.includes("/admin/login")) {
+          router.push("/admin/login")
+        }
+      } catch (error) {
+        router.push("/admin/login")
+      } finally {
+        setIsLoading(false)
+      }
     }
+
+    checkAuth()
   }, [pathname, router])
 
   const handleLogout = () => {
     Cookies.remove("admin-token")
+    document.cookie = "admin-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
     localStorage.removeItem("adminUser")
     setIsAuthenticated(false)
     router.push("/admin/login")
@@ -47,8 +71,18 @@ export default function AdminLayout({
     return <>{children}</>
   }
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#0e1723]">
+        <div className="text-[#c19b37]">Loading...</div>
+      </div>
+    )
+  }
+
+  // Show nothing if not authenticated
   if (!isAuthenticated) {
-    return null // Or a loading state
+    return null
   }
 
   const navItems = [
@@ -82,7 +116,7 @@ export default function AdminLayout({
               <div className="w-20 h-20">
                 <Image src="/mkm-logo2.png" alt="mkm-logo" className="object-contain w-full h-full" width={100} height={100} />
               </div>
-              <h1 className="text-xl font-bold text-[#c19b37]">Admin </h1>
+              <h1 className="text-xl font-bold text-[#c19b37]">Admin</h1>
             </div>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">

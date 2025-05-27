@@ -12,6 +12,19 @@ import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Cookies from "js-cookie"
 
+// Helper function to get cookie value
+const getCookie = (name: string) => {
+  // Try js-cookie first
+  const jsCookie = Cookies.get(name)
+  if (jsCookie) return jsCookie
+
+  // Fallback to document.cookie
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(';').shift()
+  return undefined
+}
+
 export default function AdminLogin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -20,14 +33,6 @@ export default function AdminLogin() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard"
-
-  useEffect(() => {
-    // Check if already authenticated
-    const token = Cookies.get("admin-token")
-    if (token) {
-      router.push("/admin/dashboard")
-    }
-  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,6 +45,7 @@ export default function AdminLogin() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Important: This ensures cookies are sent with the request
         body: JSON.stringify({ email, password }),
       })
 
@@ -49,25 +55,23 @@ export default function AdminLogin() {
         throw new Error(data.error || "Login failed")
       }
 
-      // Set the token in a cookie
-      Cookies.set("admin-token", data.token, { expires: 1 }) // 1 day expiry
-
       // Store admin info in localStorage for UI purposes
-      localStorage.setItem(
-        "adminUser",
-        JSON.stringify({
-          id: data.admin.id,
-          name: data.admin.name,
-          email: data.admin.email,
-          role: data.admin.role,
-        }),
-      )
+      const adminData = {
+        id: data.admin.id,
+        name: data.admin.name,
+        email: data.admin.email,
+        role: data.admin.role,
+      }
+      localStorage.setItem("adminUser", JSON.stringify(adminData))
+
+      // Add a small delay to ensure cookie is set
+      await new Promise(resolve => setTimeout(resolve, 100))
 
       // Redirect to dashboard or callback URL
       router.push(callbackUrl)
+      router.refresh() // Force a refresh of the router
     } catch (err: any) {
       setError(err.message || "An error occurred during login")
-      console.error(err)
     } finally {
       setLoading(false)
     }
