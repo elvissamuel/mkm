@@ -37,6 +37,7 @@ export const personalInfoSchema = z.object({
   phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
   country: z.string().min(1, "Please select a country"),
   city: z.string().min(1, "Please select a city"),
+  // amount: z.number()
 })
 
 export type PersonalInfoSchema = z.infer<typeof personalInfoSchema>
@@ -59,7 +60,15 @@ export const createProgramSchema = z.object({
   price: z.number().int().positive("Price must be a positive number"),
 })
 
+export const sendEmailSchema = z.object({
+  email: z.string(),
+  amount: z.number()
+})
+
 export type CreateProgramSchema = z.infer<typeof createProgramSchema>
+
+export type SendEmailSchema = z.infer<typeof sendEmailSchema>
+
 
 export const updateProgramSchema = z.object({
   id: z.string().uuid("Invalid program ID format"),

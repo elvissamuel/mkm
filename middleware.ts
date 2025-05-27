@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { jwtVerify } from "jose"
 
 // Define which routes require authentication
-const protectedRoutes = ["/admin/dashboard", "/admin/programs", "/admin/users", "/admin/profile"]
+const protectedRoutes = ["/admin/dashboard", "/admin/programs", "/admin/profile", "/admin/testimonies", "/admin/free-users", "/admin/premium-users"]
 
 // Define which routes should be accessible only when not authenticated
 const authRoutes = ["/admin/login"]

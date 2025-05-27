@@ -61,3 +61,8 @@ export interface DashboardStats {
     testimonies: Testimony[]
   }
 }
+
+export interface SuccessProps {
+  ref: any;
+  email: string
+}
