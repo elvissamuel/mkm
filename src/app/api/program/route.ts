@@ -84,10 +84,10 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     // Verify admin authentication
-    const adminData = await verifyAdminToken(req)
-    if (!adminData) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    // const adminData = await verifyAdminToken(req)
+    // if (!adminData) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    // }
 
     // Parse and validate request body
     const body = await req.json()
@@ -146,10 +146,10 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     // Verify admin authentication
-    const adminData = await verifyAdminToken(req)
-    if (!adminData) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    // const adminData = await verifyAdminToken(req)
+    // if (!adminData) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    // }
     const body = await req.json()
 
     // Validate ID format

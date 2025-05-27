@@ -6,10 +6,10 @@ import { verifyAdminToken } from "@/lib/auth"
 export async function GET(req: NextRequest) {
   try {
     // Verify admin authentication
-    const adminData = await verifyAdminToken(req)
-    if (!adminData) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    // const adminData = await verifyAdminToken(req)
+    // if (!adminData) {
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    // }
 
     // Fetch counts in parallel for better performance
     const [premiumUsersCount, freeUsersCount, programsCount, testimoniesCount, recentUsers, recentTestimonies] =
