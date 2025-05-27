@@ -7,14 +7,50 @@ import ServicesSection from "@/components/services-section"
 import PricingSection from "@/components/pricing-section"
 import TestimonialsSection from "@/components/testimonials-section"
 import MentorshipOffers from "@/components/mentorship-offer"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import Link from "next/link"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Home() {
   const pricingSectionRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const scrollToPricing = () => {
     pricingSectionRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  // Simulate loading state for initial page load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen pt-8 pb-14 bg-white">
+        {/* Hero Section Skeleton */}
+        <section className="relative bg-[#faecec] w-[95%] md:w-[80%] mx-auto rounded-3xl px-6 py-16 md:px-6 lg:px-12">
+          <div className="container mx-auto">
+            <div className="grid items-center gap-8 lg:grid-cols-2">
+              <div className="max-w-xl">
+                <Skeleton className="h-12 w-3/4 mb-4" />
+                <Skeleton className="h-6 w-full mb-4" />
+                <Skeleton className="h-6 w-2/3 mb-8" />
+                <div className="flex gap-4">
+                  <Skeleton className="h-10 w-32" />
+                  <Skeleton className="h-10 w-32" />
+                </div>
+              </div>
+              <div className="relative h-[400px]">
+                <Skeleton className="h-full w-full" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    )
   }
 
   return (

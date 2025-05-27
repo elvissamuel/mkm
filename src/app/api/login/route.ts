@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
+import { SignJWT } from "jose"
 import { z } from "zod"
 
 // Validation schema for login payload
@@ -43,17 +43,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      {
-        id: admin.id,
-        email: admin.email,
-        name: admin.name,
-        role: admin.role,
-      },
-      process.env.JWT_SECRET || "fallback_secret_key_change_this",
-      { expiresIn: "8h" },
-    )
+    // Generate JWT token using jose
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET || "makingkingsfornations2025#")
+    const token = await new SignJWT({
+      id: admin.id,
+      email: admin.email,
+      name: admin.name,
+      role: admin.role,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("8h")
+      .sign(secret)
 
     // Create response with admin data (excluding password)
     const response = NextResponse.json({
@@ -71,22 +71,28 @@ export async function POST(req: NextRequest) {
     response.cookies.set({
       name: "admin-token",
       value: token,
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 8 * 60 * 60, // 8 hours in seconds
     })
 
-    // CORS Headers
-    response.headers.set("Access-Control-Allow-Origin", "https://www.makingkingsfornations.com")
+    // CORS Headers - Allow both localhost and production domain
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "https://www.makingkingsfornations.com"
+    ]
+    const origin = req.headers.get("origin")
+    if (origin && allowedOrigins.includes(origin)) {
+      response.headers.set("Access-Control-Allow-Origin", origin)
+    }
     response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
     response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
     response.headers.set("Access-Control-Allow-Credentials", "true")
 
     return response
   } catch (error) {
-    console.error("Login error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

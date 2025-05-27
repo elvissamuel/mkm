@@ -61,6 +61,11 @@ export default function ProgramRegistration() {
     const {data} = await resendEmail({email, amount: program.price});
 
     if(data){
+      toast({
+        variant: "default",
+        title: "Success",
+        description: "Payment Successful!",
+      });
     form.reset();
     }
   };
@@ -71,7 +76,7 @@ export default function ProgramRegistration() {
       firstName: "",
       lastName: "",
       email: "",
-      phoneCountry: "NG",
+      phoneCountry: "",
       phoneNumber: "",
       country: "",
       city: "",
@@ -190,14 +195,18 @@ export default function ProgramRegistration() {
             <div className="space-y-2">
               <FormLabel>Phone Number*</FormLabel>
               <div className="grid grid-cols-[auto,1fr] gap-2">
-                
                 <FormField
                   control={form.control}
                   name="phoneCountry"
                   render={({ field }) => (
-                    <select onChange={field.onChange} defaultValue={field.value} className="bg-transparent text-sm focus:outline-none focus:ring-0 focus:border-gray-500 focus:border-none w-[150px] border p-2 rounded-lg" name="countryCode" id="">
-                      <option data-countryCode="NG" value="234" selected>Nigeria (+234)</option>
-                      <option data-countryCode="GB" value="44" >UK (+44)</option>
+                    <select 
+                      onChange={(e) => field.onChange(e.target.value)} 
+                      defaultValue={field.value} 
+                      className="bg-transparent text-sm focus:outline-none focus:ring-0 focus:border-gray-500 focus:border-none w-[150px] border p-2 rounded-lg" 
+                      name="countryCode"
+                    >
+                      <option data-countryCode="NG" value="234">Nigeria (+234)</option>
+                      <option data-countryCode="GB" value="44">UK (+44)</option>
                       <option data-countryCode="US" value="1">USA (+1)</option>
                       <optgroup label="Other countries">
                         <option data-countryCode="DZ" value="213">Algeria (+213)</option>
