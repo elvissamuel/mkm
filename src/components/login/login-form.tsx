@@ -40,7 +40,6 @@ export default function AdminLogin() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Important: This ensures cookies are sent with the request
         body: JSON.stringify({ email, password }),
       })
 
@@ -49,6 +48,9 @@ export default function AdminLogin() {
       if (!response.ok) {
         throw new Error(data.error || "Login failed")
       }
+
+      // Set the token in a cookie
+      Cookies.set("admin-token", data.token, { expires: 1 }) // 1 day expiry
 
       // Store admin info in localStorage for UI purposes
       localStorage.setItem(
@@ -65,7 +67,7 @@ export default function AdminLogin() {
       router.push(callbackUrl)
     } catch (err: any) {
       setError(err.message || "An error occurred during login")
-      console.error("Login error:", err)
+      console.error(err)
     } finally {
       setLoading(false)
     }

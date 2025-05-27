@@ -67,22 +67,10 @@ export async function POST(req: NextRequest) {
       token,
     })
 
-    // Set secure cookie with proper options
-    response.cookies.set({
-      name: "admin-token",
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 8 * 60 * 60, // 8 hours in seconds
-    })
-
     // CORS Headers
     response.headers.set("Access-Control-Allow-Origin", "https://www.makingkingsfornations.com")
-    response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
     response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    response.headers.set("Access-Control-Allow-Credentials", "true")
 
     return response
   } catch (error) {

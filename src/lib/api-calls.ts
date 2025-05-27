@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DashboardStats, IApiError, IApiResponse, IValidationError, TestimoniesResponse, UsersResponse, UserWithSubscriptions } from "./model";
-import { ApproveTestimonySchema, CreateProgramSchema, getById, PersonalInfoSchema, ProgramIdSchema, SendEmailSchema, testimonyFormSchema, UpdateProgramSchema } from "./validation-schema";
+import { ApproveTestimonySchema, CreateProgramSchema, getById, PersonalInfoSchema, ProgramIdSchema, testimonyFormSchema, UpdateProgramSchema } from "./validation-schema";
 import { Program, Testimony, User } from "@prisma/client";
 
 
@@ -62,22 +62,8 @@ export const getSingleProgram = async (input: z.infer<typeof getById>): Promise<
   }));
 };
 
-export const getProgramById = async (input: z.infer<typeof getById>): Promise<IApiResponse<Program>> => {
-  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/program/" + input.id, {
-    method: "GET",
-    // body: JSON.stringify(input),
-  }));
-};
-
 export const registerUser = async (input: PersonalInfoSchema): Promise<IApiResponse<User>> => {
   return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/register", {
-    method: "POST",
-    body: JSON.stringify(input),
-  }));
-};
-
-export const resendEmail = async (input: SendEmailSchema): Promise<IApiResponse<User>> => {
-  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/send-email", {
     method: "POST",
     body: JSON.stringify(input),
   }));
