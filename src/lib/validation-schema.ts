@@ -34,10 +34,11 @@ export const personalInfoSchema = z.object({
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   phoneCountry: z.string(),
+  gender: z.string().optional(),
   phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
   country: z.string().min(1, "Please select a country"),
   city: z.string().min(1, "Please select a city"),
-  // amount: z.number()
+  programId: z.string().min(1, "Please select a program")
 })
 
 export type PersonalInfoSchema = z.infer<typeof personalInfoSchema>
@@ -62,12 +63,19 @@ export const createProgramSchema = z.object({
 
 export const sendEmailSchema = z.object({
   email: z.string(),
-  amount: z.number()
+  amount: z.number(),
+  program_id: z.string()
+})
+
+export const resendEmailSchema = z.object({
+  email: z.string(),
 })
 
 export type CreateProgramSchema = z.infer<typeof createProgramSchema>
 
 export type SendEmailSchema = z.infer<typeof sendEmailSchema>
+
+export type ResendEmailSchema = z.infer<typeof resendEmailSchema>
 
 
 export const updateProgramSchema = z.object({

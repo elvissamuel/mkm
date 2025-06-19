@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
           orderBy: {
             created_at: "desc",
           },
-          take: 5,
+          take: 3,
         }),
 
         // Get recent testimonies
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
           orderBy: {
             created_at: "desc",
           },
-          take: 5,
+          take: 3,
         }),
       ])
 

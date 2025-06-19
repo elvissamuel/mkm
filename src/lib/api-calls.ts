@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DashboardStats, IApiError, IApiResponse, IValidationError, TestimoniesResponse, UsersResponse, UserWithSubscriptions } from "./model";
-import { ApproveTestimonySchema, CreateProgramSchema, getById, PersonalInfoSchema, ProgramIdSchema, SendEmailSchema, testimonyFormSchema, UpdateProgramSchema } from "./validation-schema";
+import { ApproveTestimonySchema, CreateProgramSchema, getById, PersonalInfoSchema, ProgramIdSchema, ResendEmailSchema, SendEmailSchema, testimonyFormSchema, UpdateProgramSchema } from "./validation-schema";
 import { Program, Testimony, User } from "@prisma/client";
 
 
@@ -26,10 +26,43 @@ async function handleServerError (response: Response) {
   return data;
 }
 
+// async function handleApiCalls<T> (response: Response): Promise<IApiResponse<T>> {
+//   try {
+//     if (response.status >= 400 && response.status <= 499) {
+//       return { validationErrors: await handleValidationResponse(response) };
+//     }
+
+//     if (response.status >= 500) {
+//       return { error: await handleServerError(response) };
+//     }
+
+//     return { data: await response.json() as T };
+//   } catch (error) {
+//     console.error("api call error", error);
+
+//     return { ...(error ? { error } : {}) } as IApiResponse<T>;
+//   }
+// }
+
 async function handleApiCalls<T> (response: Response): Promise<IApiResponse<T>> {
   try {
     if (response.status >= 400 && response.status <= 499) {
-      return { validationErrors: await handleValidationResponse(response) };
+      const data = await response.json();
+      
+      // Handle validation errors
+      if (data.error && Array.isArray(data.error)) {
+        return { validationErrors: await handleValidationResponse(response) };
+      }
+      
+      // Handle simple error messages (like email exists)
+      if (data.error && typeof data.error === 'string') {
+        return { 
+          error: { 
+            message: data.error,
+            name: 'ApiError'
+          } 
+        };
+      }
     }
 
     if (response.status >= 500) {
@@ -43,7 +76,6 @@ async function handleApiCalls<T> (response: Response): Promise<IApiResponse<T>> 
     return { ...(error ? { error } : {}) } as IApiResponse<T>;
   }
 }
-
 export const addTestimony = async (input: z.infer<typeof testimonyFormSchema>): Promise<IApiResponse<Testimony>> => {
   return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/testimony", {
     method: "POST",
@@ -211,3 +243,10 @@ export const approveTestimony = async (data: ApproveTestimonySchema): Promise<IA
     }),
   )
 }
+
+export const resendToExistingEmail = async (input: ResendEmailSchema): Promise<IApiResponse<User>> => {
+  return handleApiCalls(await fetch(process.env.NEXT_PUBLIC_BROWSER_URL + "api/resend-email", {
+    method: "POST",
+    body: JSON.stringify(input),
+  }));
+};
