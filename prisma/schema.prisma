@@ -15,19 +15,24 @@ model User {
   password           String
   first_name         String
   last_name          String
-  phone_number       String?
+  phone_number       String?    
+  gender             String?
   city               String?
   country            String?
-  payment_amount     Int?
-  status             String?            // fully_paid, partially_paid, not_paid
+  expectations       String?
+  program_id         String?             @unique
+  program            Program?            @relation(fields: [program_id], references: [id] )
+  mode_of_participation String?
   is_email_verified  Boolean            @default(false)
   is_active          Boolean            @default(true)
-  programs           Program[]          
+  status             String?            // derived from subscriptions
+  role               UserRole           @default(USER)
+      
   user_subscriptions UserSubscription[] @relation("UserSubscriptions")
+
   created_at         DateTime           @default(now())
   updated_at         DateTime           @updatedAt
   deleted_at         DateTime?
-  role               UserRole           @default(USER)
 
   @@index([deleted_at, is_active, is_email_verified])
   @@map(name: "user")
@@ -83,18 +88,35 @@ model Testimony {
 model Program {
   id                 String             @id @default(uuid())
   name               String             @unique
-  features           String             // comma separated strings
+  features           String
   duration           String
   price              Int
-  user_id            String?
-  user               User?              @relation(fields: [user_id], references: [id])
+  user               User?
   created_at         DateTime           @default(now())
   updated_at         DateTime           @updatedAt
   deleted_at         DateTime?
+
   user_subscriptions UserSubscription[] @relation("UserSubscriptions")
 
   @@index([deleted_at, name])
   @@map(name: "program")
+}
+
+model Payment {
+  id                    String             @id @default(uuid())
+  subscription_id       String
+  subscription          UserSubscription   @relation("SubscriptionPayments", fields: [subscription_id], references: [id])
+
+  amount                Int
+  paid_at               DateTime           @default(now())
+  payment_method        String?            // e.g. Credit Card, Bank Transfer
+  reference             String?            // optional: transaction ID
+  note                  String?
+
+  created_at            DateTime           @default(now())
+  updated_at            DateTime           @updatedAt
+
+  @@map(name: "payment")
 }
 
 model UserSubscription {
@@ -104,10 +126,13 @@ model UserSubscription {
   payment_status     String       // fully_paid, partially_paid, not_paid
   start_date         DateTime     @default(now())
   end_date           DateTime?
-  amount_paid        Int          // Track how much has been paid
-  remaining_amount   Int          // Amount left to pay
+  amount_paid        Int          // optional: or calculate from payments
+  remaining_amount   Int          // optional: or calculate from payments
+
   user               User         @relation("UserSubscriptions", fields: [user_id], references: [id])
   program            Program      @relation("UserSubscriptions", fields: [program_id], references: [id])
+  payments           Payment[]    @relation("SubscriptionPayments")
+
   created_at         DateTime     @default(now())
   updated_at         DateTime     @updatedAt
   deleted_at         DateTime?

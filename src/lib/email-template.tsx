@@ -104,9 +104,21 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({ user }) 
             Our mission is to equip and empower you with the insights, tools and resources needed to make you a better person and leader
           </p>
 
-          <div
+          <p
             style={{
-              backgroundColor: "#4a5568",
+              color: "#555555",
+              fontSize: "16px",
+              lineHeight: "1.6",
+              margin: "0 0 20px 0",
+            }}
+          >
+            To complete your registration and gain access to the program, please click the button below to make your payment.
+          </p>
+
+          <a
+            href={`${process.env.NEXT_PUBLIC_BROWSER_URL}user/${user.id}`}
+            style={{
+              backgroundColor: "#B8860B",
               color: "#ffffff",
               padding: "15px 25px",
               borderRadius: "4px",
@@ -115,10 +127,12 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({ user }) 
               fontSize: "16px",
               margin: "30px 0",
               display: "inline-block",
+              textDecoration: "none",
             }}
           >
-            Get Started Now
-          </div>
+            Complete Registration & Make Payment
+          </a>
+
         </td>
       </tr>
     </table>

@@ -39,13 +39,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         phone_number: true,
         city: true,
         country: true,
-        payment_amount: true,
+        gender: true,
         status: true,
         is_email_verified: true,
         is_active: true,
         created_at: true,
         updated_at: true,
         role: true,
+        program: true,
         // Include user subscriptions
         user_subscriptions: {
           where: {
@@ -53,6 +54,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
           },
           include: {
             program: true,
+            payments: true
           },
         },
         // Exclude password and other sensitive fields

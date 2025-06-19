@@ -1,4 +1,4 @@
-import { Program, Testimony, User } from "@prisma/client";
+import { Payment, Program, Testimony, User } from "@prisma/client";
 
 export interface IValidationError {
   field: string;
@@ -28,12 +28,15 @@ export interface PaginationData {
 
 // User interfaces
 export interface UserWithSubscriptions extends User {
+  program: Program
   user_subscriptions: {
     id: string
     user_id: string
     program_id: string
     created_at: string
     program: Program
+    payments: Payment[]
+    payment_status: string
   }[]
 }
 

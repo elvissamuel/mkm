@@ -88,8 +88,8 @@ export default function AdminLayout({
   const navItems = [
     { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
     { name: "Programs", href: "/admin/programs", icon: Package },
-    { name: "Premium Users", href: "/admin/premium-users", icon: Users },
-    { name: "Free Users", href: "/admin/free-users", icon: Users },
+    // { name: "Premium Users", href: "/admin/premium-users", icon: Users },
+    { name: "Users", href: "/admin/users", icon: Users },
     { name: "Testimonies", href: "/admin/testimonies", icon: MicIcon },
     { name: "Profile", href: "/admin/profile", icon: UserCog },
   ]

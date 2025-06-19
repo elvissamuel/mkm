@@ -57,10 +57,10 @@ export default function AdminLogin() {
 
       // Store admin info in localStorage for UI purposes
       const adminData = {
-        id: data.admin.id,
-        name: data.admin.name,
-        email: data.admin.email,
-        role: data.admin.role,
+          id: data.admin.id,
+          name: data.admin.name,
+          email: data.admin.email,
+          role: data.admin.role,
       }
       localStorage.setItem("adminUser", JSON.stringify(adminData))
 

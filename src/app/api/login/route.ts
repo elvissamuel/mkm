@@ -46,10 +46,10 @@ export async function POST(req: NextRequest) {
     // Generate JWT token using jose
     const secret = new TextEncoder().encode(process.env.JWT_SECRET || "makingkingsfornations2025#")
     const token = await new SignJWT({
-      id: admin.id,
-      email: admin.email,
-      name: admin.name,
-      role: admin.role,
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("8h")
